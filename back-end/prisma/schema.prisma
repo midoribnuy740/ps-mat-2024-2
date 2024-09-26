@@ -35,6 +35,7 @@ model Customer {
   street_name       String        // Nome da Rua
   house_number      String        // Número da Casa
   complements       String?       // Complementos; preenchimento opcional
+  district          String        @default("Centro") // Bairro
   municipality      String        // Município 
   state             String        // Estado
   phone             String        // Telefone
