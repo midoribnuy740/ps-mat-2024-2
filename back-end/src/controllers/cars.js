@@ -19,7 +19,16 @@ controller.create = async function(req, res) {
 
 controller.retrieveAll = async function(req, res) {
     try {
-      const result = await prisma.car.findMany()
+      const result = await prisma.car.findMany({
+        orderBy: [
+            { brand: 'asc' },
+            { model: 'asc' },
+            { id: 'asc' }
+        ],
+        include: {
+            customer: req.query.include
+        }
+      })
   
       // HTTP 200: OK (implícito)
       res.send(result)

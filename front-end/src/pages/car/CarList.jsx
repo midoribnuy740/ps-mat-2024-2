@@ -128,7 +128,7 @@ export default function CarList() {
   async function fetchData() {
     showWaiting(true)
     try {
-      const result = await myfetch.get('/cars')
+      const result = await myfetch.get('/cars?include=customer')
       setState({
         ...state,
         cars: result,
