@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel } from '@mui/material'
+import { Checkbox, FormControlLabel, Icon, InputAdornment } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
@@ -35,16 +35,16 @@ export default function CarForm() {
     plates: '',
     selling_date: null,
     selling_price: '',
-    customer_id: null
+    customer_id: ''
   }
 
   const [state, setState] = React.useState({
     car: { ...formDefaults },
     formModified: false,
     customers: [],
-    inputErrors: {}
+    inputErrors: {},
   })
-  const { car, formModified, inputErrors } = state
+  const { car, customers, formModified, inputErrors } = state
 
   const params = useParams()
   const navigate = useNavigate()
@@ -142,20 +142,21 @@ export default function CarForm() {
     a função loadData() para buscar no back-end os dados do cliente a ser editado
   */
   React.useEffect(() => {
-    if (params.id) loadData()
+    loadData()
   }, [])
 
   async function loadData() {
     showWaiting(true)
     try {
-      
+
       let car = { ...formDefaults }, customers = []
 
-      // Busca a lista de clientes para preencher o combo de escolha do cliente que comprou o carro
+      // Busca a lista de clientes para preencher o combo de escolha
+      // do cliente que comprou o carro
       customers = await myfetch.get('/customers')
 
-      // Se houver parâmetro na rota, precisamos buscar o carro para ser editado
-
+      // Se houver parâmetro na rota, precisamos buscar o carro para
+      // ser editado
       if(params.id) {
 
         car = await myfetch.get(`/cars/${params.id}`)
@@ -169,12 +170,11 @@ export default function CarForm() {
       }
 
       setState({ ...state, car, customers })
-    } 
-    catch (error) {
+
+    } catch (error) {
       console.error(error)
       notify(error.message, 'error')
-    } 
-    finally {
+    } finally {
       showWaiting(false)
     }
   }
@@ -190,6 +190,14 @@ export default function CarForm() {
 
     // Navega de volta para a página de listagem
     navigate('..', { relative: 'path', replace: true })
+  }
+
+  function handleKeyDown(event) {
+    if(event.key === 'Delete') {
+      const stateCopy = {...state}
+      stateCopy.car.customer_id = null
+      setState(stateCopy)
+    }
   }
 
   return (
@@ -345,12 +353,12 @@ export default function CarForm() {
             value={car.customer_id}
             onChange={handleFieldChange}
             select
-            helperText={inputErrors?.customer_id}
+            helperText={inputErrors?.customer_id || 'Tecle DEL para limpar o cliente'}
             error={inputErrors?.customer_id}
           >
             {customers.map((c) => (
-              <MenuItem key={c.id} value={c.value}>
-                {c.label}
+              <MenuItem key={c.id} value={c.id}>
+                {c.name}
               </MenuItem>
             ))}
           </TextField>

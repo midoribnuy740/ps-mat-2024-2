@@ -145,8 +145,21 @@ controller.login = async function(req, res) {
             { expiresIn: '24h' }            // Prazp de vaçodade dp token
         )
 
+        // Formamos o cookie para enviar ao front-end
+        res.cookie(process.env.AUTH_COOKIE_NAME, token, {
+            httpOnly: true,   // O cookie ficará inacessível para o JS no front-end
+            secure: true,
+            sameSite: true,
+            path: '/',
+            maxAge: 24 * 60 * 60 * 100  // 24h
+        })
+
         // Retorna o token e o usuário autenticado
-        res.send({token, user})
+        // res.send({token, user})
+
+        // Com a implementação do cookie, apenas o usuário é retornado ao front-end
+        // HTTP 200: OK (implícito)
+        res.send({user})
     }
     catch(error) {
         console.error(error)
@@ -154,6 +167,12 @@ controller.login = async function(req, res) {
         // HTTP 500: Internal Server Error
         res.status(500).end()
     }
+}
+
+controller.logout = function (req, res) {
+    res.clearCookie(process.env.AUTH_COOKIE_NAME)
+    // HTTP 204: No Content
+    res.status(204).end()
 }
 
 controller.me = function(req, res) {

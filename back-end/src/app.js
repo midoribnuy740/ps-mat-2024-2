@@ -14,7 +14,7 @@ import cors from 'cors'
 
 app.use(cors({
     origin: process.env.FRONT_END_URL.split(','),
-    // credentials: true
+    credentials: true
 }))
 
 app.use(logger('dev'))

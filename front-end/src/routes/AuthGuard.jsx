@@ -35,6 +35,7 @@ export default function AuthGuard({ children }) {
     // Salva a rota atual para posterior redirecionamento,
     // caso a rota atual não seja o próprio login
     if(! location.pathname.includes('login')) setRedirectLocation(location)
+
     checkAuthUser()
   }, [location])
 
