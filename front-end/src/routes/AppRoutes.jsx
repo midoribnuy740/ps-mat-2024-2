@@ -17,7 +17,7 @@ import Login from '../pages/Login'
 export default function AppRoutes() {
   return <Routes>
     <Route path="/" element={ <Homepage /> } />
-    
+
     <Route path="/login" element={ <Login /> } />
 
     <Route path="/cars" element={ <AuthGuard> <CarList /> </AuthGuard> } />
@@ -27,9 +27,9 @@ export default function AppRoutes() {
     <Route path="/customers" element={ 
       <AuthGuard> <CustomerList /> </AuthGuard> 
     } />
-
-    <Route path="/customers/new" element={ <AuthGuard> <CustomerForm /> </AuthGuard> } />
-    <Route path="/customers/:id" element={ <AuthGuard> <CustomerForm /> </AuthGuard> } />
+    
+    <Route path="/customers/new" element={ <AuthGuard> <CustomerForm /> </AuthGuard>} />
+    <Route path="/customers/:id" element={ <AuthGuard> <CustomerForm />  </AuthGuard> } />
 
     {/* 11. Crie uma rota para esse componente. */}
     <Route path="/about" element={ <About /> } />

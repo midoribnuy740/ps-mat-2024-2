@@ -8,3 +8,21 @@ Perguntas feitas pelo comando:
 * Language: Javascript
 * Template engine: None
 * Package manager: npm
+
+# Execução do projeto back-end
+
+Executar no terminal:
+* cd back-end
+* npm run dev
+
+# Instalação do Prisma (ORM)
+
+npm install prisma --save-dev
+
+# Inicialização do Prisma
+
+npx prisma init --datasource-provider postgresql
+
+# Executando uma migration no Prisma
+
+npx prisma migrate dev --name create-cars

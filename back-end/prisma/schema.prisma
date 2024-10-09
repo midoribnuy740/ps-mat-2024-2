@@ -24,42 +24,34 @@ model Car {
   imported          Boolean       // Se o carro é importado ou não
   plates            String        // Placas do carro
   selling_date      DateTime?     // Data de venda; preenchimento opcional
-  selling_price     Decimal?      // Preço de venda; preenchimento opcional
+  selling_price     Decimal?      // Preço de venda; preenchimento opcional 
   customer_id       Int?
-  customer          Customer?     @relation(fields: [customer_id], references: [id]) 
+  customer          Customer?     @relation(fields: [customer_id], references: [id])
 }
 
 model Customer {
   id                Int           @id @default(autoincrement())
-  name              String        // Nome do Cliente
-  ident_document    String        // Documento de Identidade
-  birth_date        DateTime?     // Data de nascimento; preenchimento opcional
-  street_name       String        // Nome da Rua
-  house_number      String        // Número da Casa
-  complements       String?       // Complementos; preenchimento opcional
-  district          String        @default("Centro") // Bairro
-  municipality      String        // Município 
-  state             String        // Estado
-  phone             String        // Telefone
-  email             String        // E-mail
+  name              String
+  ident_document    String
+  birth_date        DateTime?
+  street_name       String
+  house_number      String
+  complements       String?
+  district          String        @default("Centro")
+  municipality      String
+  state             String
+  phone             String
+  email             String
   cars              Car[]         // Carros adquiridos pelo cliente
 }
 
 model User {
   id                Int           @id @default(autoincrement())
-  fullname          String        // Nome Completo
+  fullname          String        // Nome completo
   username          String        @unique   // Não pode repetir
-  email             String        @unique   // E-mail
-  password          String        // Senha
+  email             String        @unique
+  password          String
   is_admin          Boolean       @default(false)
 }
 
-model Seller {
-  id                Int           @id @default(autoincrement()) // Chave primária, autoincremental
-  fullname          String        // Nome Completo
-  birth_date        DateTime      // Data de nascimento
-  ident_document    String        @unique   // CPF, índice único
-  email             String        @unique   // E-mail, índice único
-  phone             String        // Telefone/Celular
-  is_manager        Boolean       @default(false) // É gerente? (Valor padrão: false)
-}
+

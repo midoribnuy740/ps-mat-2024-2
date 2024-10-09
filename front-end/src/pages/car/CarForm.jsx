@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, Icon, InputAdornment } from '@mui/material'
+import { Checkbox, FormControlLabel } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
@@ -25,7 +25,6 @@ export default function CarForm() {
     que, devido ao funcionamento do componente DatePicker, deve
     iniciar valendo null.
   */
-
   const formDefaults = {
     brand: '',
     model: '',
@@ -34,7 +33,6 @@ export default function CarForm() {
     imported: false,
     plates: '',
     selling_date: null,
-    selling_price: '',
     customer_id: ''
   }
 
@@ -352,6 +350,7 @@ export default function CarForm() {
             fullWidth
             value={car.customer_id}
             onChange={handleFieldChange}
+            onKeyDown={handleKeyDown}
             select
             helperText={inputErrors?.customer_id || 'Tecle DEL para limpar o cliente'}
             error={inputErrors?.customer_id}

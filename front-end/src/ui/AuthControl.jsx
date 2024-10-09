@@ -27,9 +27,9 @@ export default function AuthControl() {
         
         // Apaga as informações em memória do usuário autenticado
         setAuthUser(null)
-        
-        showWaiting(false)
 
+        showWaiting(false)
+        
         // Navega para a página de login
         navigate('/login')
       }
@@ -38,7 +38,7 @@ export default function AuthControl() {
         notify(error.message, 'error')
         showWaiting(false)
       }
-
+      
       // Apaga o token do localStorage
       // window.localStorage.removeItem(import.meta.env.VITE_AUTH_TOKEN_NAME)
 
