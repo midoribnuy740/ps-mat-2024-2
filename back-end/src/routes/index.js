@@ -7,11 +7,13 @@ router.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
-// Esta rota será chamada por um cronjob para fazer uma requisição ao banco de dados e
-// tentar manter o projeto do Supabase ativo
+// Esta rota será chamada por um cronjob para fazer
+// uma requisição ao banco de dados e tentar manter
+// o projeto do Supabase ativo
 router.get('/keep-alive', async function(req, res) {
   try {
-    // Uma simples requisição ao BD, obtendo o número de usuários cadastrados
+    // Uma simples requisição ao BD, obtendo o número
+    // de usuários cadastrados
     await prisma.user.count()
 
     // HTTP 204: No Content
