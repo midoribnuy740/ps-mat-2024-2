@@ -28,37 +28,37 @@ export default function MainMenu() {
       children: 'Listagem de veículos',
       to: '/cars',
       divider: false,
-      requiresAuth: true
+      requiresAuth: authUser
     },
     {
       children: 'Cadastro de veículos',
       to: '/cars/new',
       divider: true,
-      requiresAuth: true
+      requiresAuth: authUser
     },
     {
       children: 'Listagem de clientes',
       to: '/customers',
       divider: false,
-      requiresAuth: true
+      requiresAuth: authUser
     },
     {
       children: 'Cadastro de clientes',
       to: '/customers/new',
       divider: true,
-      requiresAuth: true
+      requiresAuth: authUser
     },
     {
       children: 'Listagem de usuários',
       to: '/users',
       divider: false,
-      requiresAuth: true
+      requiresAuth: authUser?.is_admin
     },
     {
       children: 'Cadastro de usuários',
       to: '/users/new',
       divider: true,
-      requiresAuth: true
+      requiresAuth: authUser?.is_admin
     },
     {
       children: 'Sobre o autor',

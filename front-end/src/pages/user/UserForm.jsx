@@ -57,7 +57,39 @@ export default function UserForm() {
   async function handleFormSubmit(event) {
     event.preventDefault(); // Evita que a página seja reuserregada
     showWaiting(true); // Exibe a tela de espera
+
     try {
+
+      // Limpa as mensagens de erro
+      setState({ ...state, inputErrors: {} })
+
+      // Validação dos campos de senha e e-mail
+        if(user.email !== user.confirm.email)
+        {
+          const msg = 'A confirmação do e-mail não coincide com o e-mail.'
+          const inputErrorsCopy = { ...inputErrors, confirm_email: msg }
+          setState({ ...state, inputErrors: inputErrorsCopy})
+          throw new Error(msg)
+        }
+
+      // A validação da senha e a validação do e-mail somente será processada
+      // se os respectivos campos estiverem visíveis
+      if(showPasswordFields && user.password !== user.confirm_password)
+      {
+        const msg = 'A confirmação da senha não coincide com a senha.'
+        const inputErrorsCopy = { ...inputErrors, confirm_password: msg }
+        setState({ ...state, inputErrors: inputErrorsCopy})
+        throw new Error(msg)
+      }
+
+      // Apaga os campos de confirmação do objeto que será enviado ao back-end
+      delete user.confirm_email
+      delete user.confirm_password
+
+      // Se os campos de senha não estiverem visíveis, apaga também o campo 'password'
+      // do objeto que será enviado ao back-end
+      if(! showPasswordFields) delete user.password
+
       // Invoca a validação dos dados da biblioteca Zod
       // por meio do model user === '' ? '' : parseFloat(value)
 
@@ -105,6 +137,8 @@ export default function UserForm() {
       // ser editado
       if(params.id) {
         user = await myfetch.get(`/users/${params.id}`)
+        // Iniciamos o campo confirm_email
+        user.confirm_email = user.email
       }
 
       /* Se não houver parâmetro na rota, significa que estamos cadastrando um
@@ -235,7 +269,7 @@ export default function UserForm() {
               name='password'
               label='Senha'
               variant='password'
-              required
+              required={showPasswordFields}
               fullWidth
               value={user.password}
               onChange={handleFieldChange}
@@ -249,7 +283,7 @@ export default function UserForm() {
               name='confirm_password'
               label='Confirmar Senha'
               variant='filled'
-              required
+              required={showPasswordFields}
               fullWidth
               value={user.confirm_password}
               onChange={handleFieldChange}
