@@ -22,48 +22,50 @@ export default function MainMenu() {
     {
       children: 'Página inicial',
       to: '/',
-      divider: true
+      divider: true,
+      authLevel: 0
     },
     {
       children: 'Listagem de veículos',
       to: '/cars',
       divider: false,
-      requiresAuth: authUser
+      authLevel: 1
     },
     {
       children: 'Cadastro de veículos',
       to: '/cars/new',
       divider: true,
-      requiresAuth: authUser
+      authLevel: 1
     },
     {
       children: 'Listagem de clientes',
       to: '/customers',
       divider: false,
-      requiresAuth: authUser
+      authLevel: 1
     },
     {
       children: 'Cadastro de clientes',
       to: '/customers/new',
       divider: true,
-      requiresAuth: authUser
+      authLevel: 1
     },
     {
       children: 'Listagem de usuários',
       to: '/users',
       divider: false,
-      requiresAuth: authUser?.is_admin
+      authLevel: 2
     },
     {
       children: 'Cadastro de usuários',
       to: '/users/new',
       divider: true,
-      requiresAuth: authUser?.is_admin
+      authLevel: 2
     },
     {
       children: 'Sobre o autor',
       to: '/about',
-      divider: false
+      divider: false,
+      authLevel: 0
     },
   ]
 
@@ -93,7 +95,11 @@ export default function MainMenu() {
       >
         {
           menuItems.map(item => {
-            if(!(item?.requiresAuth) || (item?.requiresAuth && authUser)) {
+            if(
+              (item.authLevel === 0) ||
+              (item.authLevel === 1 && authUser) ||
+              (item.authLevel === 2 && authUser?.is_admin)
+            ) {
               return <MenuItem 
                 key={item.to} 
                 onClick={handleClose} 

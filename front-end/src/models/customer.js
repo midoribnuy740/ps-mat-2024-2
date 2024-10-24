@@ -69,7 +69,7 @@ const Customer = z.object({
     .refine(val => {
       console.log('val.length', val.length, 'val', val)
       return val.length === 15
-}   , { message: 'O número do telefone/celular está incompleto' }),
+}   , { message: 'O número do telefone/celular deve ter 15 posições' }),
 
   email:
     z.string()
