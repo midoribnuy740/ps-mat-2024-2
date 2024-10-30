@@ -41,7 +41,7 @@ export default function UserForm() {
   const { askForConfirmation, ConfirmDialog } = useConfirmDialog()
   const { notify, Notification } = useNotification()
   const { showWaiting, Waiting } = useWaiting()
-
+  
   function handleFieldChange(event) {
     const userCopy = { ...user }
 
@@ -51,11 +51,12 @@ export default function UserForm() {
     else {
       userCopy[event.target.name] = event.target.value
     }
+    
     setState({ ...state, user: userCopy, formModified: true })
   }
 
   async function handleFormSubmit(event) {
-    event.preventDefault(); // Evita que a página seja reuserregada
+    event.preventDefault(); // Evita que a página seja recarregada
     showWaiting(true); // Exibe a tela de espera
 
     try {
@@ -64,47 +65,41 @@ export default function UserForm() {
       setState({ ...state, inputErrors: {} })
 
       // Validação dos campos de senha e e-mail
-        if(user.email !== user.confirm.email)
-        {
-          const msg = 'A confirmação do e-mail não coincide com o e-mail.'
-          const inputErrorsCopy = { ...inputErrors, confirm_email: msg }
-          setState({ ...state, inputErrors: inputErrorsCopy})
-          throw new Error(msg)
-        }
-
-      // A validação da senha e a validação do e-mail somente será processada
-      // se os respectivos campos estiverem visíveis
-      if(showPasswordFields && user.password !== user.confirm_password)
-      {
-        const msg = 'A confirmação da senha não coincide com a senha.'
-        const inputErrorsCopy = { ...inputErrors, confirm_password: msg }
-        setState({ ...state, inputErrors: inputErrorsCopy})
+      if(user.email !== user.confirm_email) {
+        const msg = 'A confirmação do e-mail não coincide com o e-mail.'
+        const inputErrorsCopy = { ...inputErrors, confirm_email: msg }
+        setState({ ...state, inputErrors: inputErrorsCopy })
         throw new Error(msg)
       }
 
-      // Apaga os campos de confirmação do objeto que será enviado ao back-end
+      // A validação da senha e da validação da senha somente será
+      // processada se os respectivos campos estiverem visíveis
+      if(showPasswordFields && user.password !== user.confirm_password) {
+        const msg = 'A confirmação da senha não coincide com a senha.'
+        const inputErrorsCopy = { ...inputErrors, confirm_password: msg }
+        setState({ ...state, inputErrors: inputErrorsCopy })
+        throw new Error(msg)
+      }
+
+      // Apaga os campos de confirmação do objeto que será enviado
+      // ao back-end
       delete user.confirm_email
       delete user.confirm_password
 
-      // Se os campos de senha não estiverem visíveis, apaga também o campo 'password'
-      // do objeto que será enviado ao back-end
+      // Se os campos de senha não estiverem visíveis, apaga também
+      // o campo password do objeto que será enviado ao back-end
       if(! showPasswordFields) delete user.password
-
-      // Invoca a validação dos dados da biblioteca Zod
-      // por meio do model user === '' ? '' : parseFloat(value)
-
-      console.log(user)
 
       // Se houver parâmetro na rota, significa que estamos modificando
       // um usuário já existente. A requisição será enviada ao back-end
       // usando o método PUT
       if (params.id) await myfetch.put(`/users/${params.id}`, user)
-      // Caso contrário, estamos criando um novo cliente, e enviaremos
+      // Caso contrário, estamos criando um novo usuário, e enviaremos
       // a requisição com o método POST
       else await myfetch.post('/users', user)
 
       // Deu certo, vamos exbir a mensagem de feedback que, quando for
-      // fechada, vai nos mandar de volta para a listagem de clientes
+      // fechada, vai nos mandar de volta para a listagem de usuários
       notify('Item salvo com sucesso.', 'success', 4000, () => {
         navigate('..', { relative: 'path', replace: true })
       })
@@ -118,10 +113,10 @@ export default function UserForm() {
   }
 
   /*
-    useEffect() que é executado apenas uma vez, no userregamento do componente.
+    useEffect() que é executado apenas uma vez, no carregamento do componente.
     Verifica se a rota tem parâmetro. Caso tenha, significa que estamos vindo
     do componente de listagem por meio do botão de editar, e precisamos chamar
-    a função loadData() para bususer no back-end os dados do usuário a ser editado
+    a função loadData() para buscar no back-end os dados do usuário a ser editado
   */
   React.useEffect(() => {
     loadData()
@@ -133,19 +128,20 @@ export default function UserForm() {
 
       let user = { ...formDefaults }
 
-      // Se houver parâmetro na rota, precisamos bususer o usuário para
+      // Se houver parâmetro na rota, precisamos buscar o usuário para
       // ser editado
       if(params.id) {
         user = await myfetch.get(`/users/${params.id}`)
-        // Iniciamos o campo confirm_email
+        // Iniciamos o campo confirm_email com o mesmo valor de email
         user.confirm_email = user.email
       }
 
-      /* Se não houver parâmetro na rota, significa que estamos cadastrando um
-         novo usuário e, portanto, os campos de senha serão exibidos. Se houver
-         parâmetro, estaremos editando um usuário e os campos de senha não serão
-         exibidos por padrão. */
-      setState({ ...state, user, showPasswordFields: !params.id })
+      /* Se não houver parâmetro na rota, significa que estamos
+         cadastrando um novo usuário e, portanto, os campos de
+         senha serão exibidos. Se houver parâmetro, estaremos
+         editando um usuário e os campos de senha não serão
+         exibidos por padrão */
+      setState({ ...state, user, showPasswordFields: !(params.id) })
 
     } catch (error) {
       console.error(error)
@@ -175,15 +171,16 @@ export default function UserForm() {
       <Waiting />
 
       <Typography variant='h1' gutterBottom>
-        {params.id ? `Editar usuário #${params.id}` : 'Cadastrar novo usuário'}
+        {params.id ? `Editar usuáro #${params.id}` : 'Cadastrar novo usuário'}
       </Typography>
 
       <Box className='form-fields'>
         <form onSubmit={handleFormSubmit}>
+          
           <TextField
-            name='fullname'
-            label='Nome Completo'
-            variant='filled'
+            name="fullname"
+            label="Nome completo"
+            variant="filled"
             required
             fullWidth
             value={user.fullname}
@@ -193,9 +190,9 @@ export default function UserForm() {
           />
 
           <TextField
-            name='username'
-            label='Nome de usuário'
-            variant='filled'
+            name="username"
+            label="Nome de usuário"
+            variant="filled"
             required
             fullWidth
             value={user.username}
@@ -205,9 +202,9 @@ export default function UserForm() {
           />
 
           <TextField
-            name='email'
-            label='E-mail'
-            variant='filled'
+            name="email"
+            label="E-mail"
+            variant="filled"
             required
             fullWidth
             value={user.email}
@@ -217,9 +214,9 @@ export default function UserForm() {
           />
 
           <TextField
-            name='confirm_email'
-            label='Confirmar E-mail'
-            variant='filled'
+            name="confirm_email"
+            label="Conforme o e-mail"
+            variant="filled"
             required
             fullWidth
             value={user.confirm_email}
@@ -232,31 +229,31 @@ export default function UserForm() {
             <FormControlLabel
               control={
                 <Checkbox
-                  name='is_admin'
-                  variant='filled'
-                  value={user.is_admin = 'is_admin'}
-                  checked={user.is_admin = 'is_admin'}
+                  name="is_admin"
+                  variant="filled"
+                  value={user.is_admin}
+                  checked={user.is_admin}
                   onChange={handleFieldChange}
-                  color='primary'
+                  color="primary"
                 />
               }
               label="É admin?"
             />
           </div>
 
-          { params.id &&
+          { params.id && 
             <div class="MuiFormControl-root">
               <FormControlLabel
                 control={
                   <Checkbox
-                    name='change_password'
-                    variant='filled'
+                    name="change_password"
+                    variant="filled"
                     value={showPasswordFields}
                     checked={showPasswordFields}
-                    onChange={() => setState({
-                      ...state, showPasswordFields: !showPasswordFields
+                    onChange={() => setState({ 
+                      ...state, showPasswordFields: !showPasswordFields 
                     })}
-                    color='primary'
+                    color="primary"
                   />
                 }
                 label="Alterar senha"
@@ -264,13 +261,14 @@ export default function UserForm() {
             </div>
           }
 
-          {showPasswordFields &&
+          { showPasswordFields && 
             <TextField
-              name='password'
-              label='Senha'
-              variant='password'
+              name="password"
+              label="Senha"
+              variant="filled"
               required={showPasswordFields}
               fullWidth
+              type="password"
               value={user.password}
               onChange={handleFieldChange}
               helperText={inputErrors?.password}
@@ -278,13 +276,14 @@ export default function UserForm() {
             />
           }
 
-          {showPasswordFields &&
+          { showPasswordFields && 
             <TextField
-              name='confirm_password'
-              label='Confirmar Senha'
-              variant='filled'
+              name="confirm_password"
+              label="Confirme a senha"
+              variant="filled"
               required={showPasswordFields}
               fullWidth
+              type="password"
               value={user.confirm_password}
               onChange={handleFieldChange}
               helperText={inputErrors?.confirm_password}

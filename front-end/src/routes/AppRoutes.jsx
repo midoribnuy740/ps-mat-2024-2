@@ -10,8 +10,8 @@ import CarList from '../pages/car/CarList'
 import CustomerForm from '../pages/customer/CustomerForm'
 import CustomerList from '../pages/customer/CustomerList'
 
-import UserForm from '../pages/user/UserForm'
 import UserList from '../pages/user/UserList'
+import UserForm from '../pages/user/UserForm'
 
 import About from '../pages/About'
 

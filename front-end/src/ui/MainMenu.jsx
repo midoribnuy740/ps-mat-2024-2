@@ -18,6 +18,15 @@ export default function MainMenu() {
 
   const { authUser } = React.useContext(AuthUserContext)
 
+  /*
+    authLevel para o menu principal:
+    * Nível 0: o menu é sempre exibido, independentemente de haver
+               usuário autenticado
+    * Nível 1: o menu será exibido apenas se houver usuário autenticado
+    * Nível 2: o menu será exibido apenas se o usuário autenticado for
+    *          administrador       
+  */
+
   const menuItems = [
     {
       children: 'Página inicial',
@@ -50,15 +59,10 @@ export default function MainMenu() {
       authLevel: 1
     },
     {
-      children: 'Listagem de usuários',
-      to: '/users',
-      divider: false,
-      authLevel: 2
-    },
-    {
       children: 'Cadastro de usuários',
-      to: '/users/new',
+      to: '/users',
       divider: true,
+      // Item do menu só aparece se o usuário logado for administrador
       authLevel: 2
     },
     {

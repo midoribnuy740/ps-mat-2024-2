@@ -25,7 +25,7 @@ const Customer = z.object({
     // Remove eventuais sublinhados se o usuário não preencheu
     // totalmente o CPF
     .transform(val => val.replace('_', ''))
-    .refine(val => val.length === 14, { message: 'O CPF está incompleto' })
+    .refine(val => val.length === 14, { message: 'O CPF deve ter exatamente 14 dígitos' })
     .refine(val => cpf.isValid(val), { message: 'CPF inválido' }),
 
   birth_date:
@@ -58,7 +58,7 @@ const Customer = z.object({
 
   state:
     z.string()
-    .length(2, { message: 'state deve ter, exatamente, 2 caracteres' }),
+    .length(2, { message: 'UF deve ter, exatamente, 2 caracteres' }),
 
   phone:
     z.string()
@@ -69,7 +69,7 @@ const Customer = z.object({
     .refine(val => {
       console.log('val.length', val.length, 'val', val)
       return val.length === 15
-}   , { message: 'O número do telefone/celular está incompleto' }),
+}   , { message: 'O número do telefone/celular deve ter 15 posições' }),
 
   email:
     z.string()
