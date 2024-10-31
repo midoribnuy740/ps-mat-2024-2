@@ -59,8 +59,15 @@ export default function MainMenu() {
       authLevel: 1
     },
     {
-      children: 'Cadastro de usuários',
+      children: 'Listagem de usuários',
       to: '/users',
+      divider: false,
+      // Item do menu só aparece se o usuário logado for administrador
+      authLevel: 2
+    },
+    {
+      children: 'Cadastro de usuários',
+      to: '/users/new',
       divider: true,
       // Item do menu só aparece se o usuário logado for administrador
       authLevel: 2
@@ -121,5 +128,4 @@ export default function MainMenu() {
     </div>
   );
 }
-
 
