@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { cpf } from 'cpf-cnpj-validator'
+import Car from './car.js'
 
 /*
   O cliente deve ser maior de 18 anos.
@@ -68,13 +69,18 @@ const Customer = z.object({
     // campo
     .refine(val => {
       console.log('val.length', val.length, 'val', val)
-      return val.length === 15
+      return val.lCength === 15
     }   
     , { message: 'O número do telefone/celular está incompleto' }),
 
   email:
     z.string()
-    .email({ message: 'E-mail inválido' })
+    .email({ message: 'E-mail inválido' }),
+
+  cars: z
+    .array(
+      z.lazy(() => Car) // Usa o model Car, importado do arquivo car.js
+    )
 
 })
 

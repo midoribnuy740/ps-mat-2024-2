@@ -1,11 +1,12 @@
 import { z } from 'zod'
+import Customer from './customer.js';
 
 const maxSellingDate = new Date(); // Hoje
 const minSellingDate = new Date(1960, 0, 1); // Define a data mínima para 1 de janeiro de 1960
 const maxYearManufacture = new Date()
 maxYearManufacture.setFullYear(maxYearManufacture.getFullYear())
 
-export default z.object({
+const Car = z.object({
   brand: z
     .string()
     .max(25, { message: 'O marca deve ter, no máximo, 25 caracteres' }),
@@ -48,4 +49,14 @@ export default z.object({
     .gte(1000, { message: 'O valor deve ser maior que R$ 1.000' })
     .lte(5000000, { message: 'O valor deve ser menor que R$ 5.000.000' })
     .nullable(),
+
+  customer_id: z
+    .number()
+    .nullable(),
+
+  customer: z.lazy(() => Customer)
+    .nullable(), // Usa o model Customer, importado do arquivo customer.js
+    
 });
+
+export default Car
