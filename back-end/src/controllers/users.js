@@ -1,6 +1,7 @@
 import prisma from '../database/client.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import User  from '../models/user.js'
 
 const controller = {}     // Objeto vazio
 
